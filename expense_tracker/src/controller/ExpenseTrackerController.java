@@ -72,4 +72,22 @@ public class ExpenseTrackerController {
       view.toFront();}
 
   }
+
+  public void undoTransaction(int selectedRow) {
+
+    if (selectedRow == -1 || selectedRow >= model.getTransactions().size()) {
+      throw new IllegalArgumentException("Invalid row selected");
+    }
+
+    //Get transaction for selected row
+    Transaction removeTransaction = model.getTransactions().get(selectedRow);
+
+    //Remove transaction from transactions list
+    model.removeTransaction(removeTransaction);
+
+    refresh();
+
+
+
+  }
 }

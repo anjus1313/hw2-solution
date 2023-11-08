@@ -5,6 +5,10 @@ import view.ExpenseTrackerView;
 import model.Filter.AmountFilter;
 import model.Filter.CategoryFilter;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+
 public class ExpenseTrackerApp {
 
   /**
@@ -67,7 +71,45 @@ public class ExpenseTrackerApp {
     JOptionPane.showMessageDialog(view,exception.getMessage());
     view.toFront();
    }});
-    
+
+      // Add action listener to the Jframe
+      view.getTransactionsTable().addMouseListener(new MouseListener() {
+          @Override
+          public void mouseClicked(MouseEvent e) {
+              // Get row selected by user from view
+              int selectedRow = view.getTransactionsTable().getSelectedRow();
+              //JOptionPane.showMessageDialog(view, String.valueOf(selectedRow));
+              //Check if valid row is selected
+              if(selectedRow != -1 && selectedRow < model.getTransactions().size()){
+                  view.enableUndoBtn();
+              }
+              else {
+                  view.disableUndoBtn();
+              }
+          }
+          @Override
+          public void mousePressed(MouseEvent e) {}
+          @Override
+          public void mouseReleased(MouseEvent e) {}
+          @Override
+          public void mouseEntered(MouseEvent e) {}
+          @Override
+          public void mouseExited(MouseEvent e) {}
+      });
+
+      // Handles remove transaction button clicks
+      view.getUndoTransactionBtn().addActionListener(e -> {
+
+          // Get row selected by user from view
+          int selectedRow = view.getTransactionsTable().getSelectedRow();
+
+          // Call controller to remove transaction
+          controller.undoTransaction(selectedRow);
+
+          // Call view to disable button
+          view.disableUndoBtn();
+
+      });
 
   }
 }

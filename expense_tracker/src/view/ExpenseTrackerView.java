@@ -16,6 +16,7 @@ public class ExpenseTrackerView extends JFrame {
 
   private JTable transactionsTable;
   private JButton addTransactionBtn;
+  private JButton undoTransactionBtn;
   private JFormattedTextField amountField;
   private JTextField categoryField;
   private DefaultTableModel model;
@@ -61,8 +62,9 @@ public class ExpenseTrackerView extends JFrame {
     JLabel amountFilterLabel = new JLabel("Filter by Amount:");
     amountFilterField = new JTextField(10);
     amountFilterBtn = new JButton("Filter by Amount");
-  
 
+    undoTransactionBtn = new JButton("Undo Transaction");
+    undoTransactionBtn.setEnabled(false);
   
     // Layout components
     JPanel inputPanel = new JPanel();
@@ -75,6 +77,7 @@ public class ExpenseTrackerView extends JFrame {
     JPanel buttonPanel = new JPanel();
     buttonPanel.add(amountFilterBtn);
     buttonPanel.add(categoryFilterBtn);
+    buttonPanel.add(undoTransactionBtn);
   
     // Add panels to frame
     add(inputPanel, BorderLayout.NORTH);
@@ -160,9 +163,11 @@ public class ExpenseTrackerView extends JFrame {
         model.addRow(new Object[]{rowNum+=1,t.getAmount(), t.getCategory(), t.getTimestamp()}); 
       }
       // Add total row
-      Object[] totalRow = {"Total", null, null, totalCost};
-      model.addRow(totalRow);
-  
+      if (totalCost!=0){
+          Object[] totalRow = {"Total", null, null, totalCost};
+          model.addRow(totalRow);
+      }
+
       // Fire table update
       transactionsTable.updateUI();
   
@@ -193,6 +198,10 @@ public class ExpenseTrackerView extends JFrame {
 
       transactionsTable.repaint();
   }
+
+  public JButton getUndoTransactionBtn(){   return undoTransactionBtn;}
+  public void enableUndoBtn(){  undoTransactionBtn.setEnabled(true);}
+  public void disableUndoBtn(){  undoTransactionBtn.setEnabled(false);}
 
 
 }
